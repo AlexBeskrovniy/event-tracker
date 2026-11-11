@@ -1,3 +1,3 @@
 export default function Day() {
-    return ('Day');
+    return ('Day')
 }
