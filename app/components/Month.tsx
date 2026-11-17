@@ -72,8 +72,8 @@ export default function Month() {
     return (
         <>
             <h3>{ selectedMonthTitle }</h3>
-            <div className='month'>
-                <div className='month-cells-wrapper'>
+            <div className='mb-8'>
+                <div className='grid gap-1 grid-cols-7 grid-rows-6'>
                     { dayCells }
                 </div>
             </div>

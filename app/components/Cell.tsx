@@ -32,15 +32,25 @@ export default function Cell({ day, month, year, isToday, hasData }: CellProps) 
     const classes = `cell ${holidayClass} ${activeClass} ${withData}`;
 
     return (
+        <>
         <div
-            className={classes.trim()}
+            className='relative bg-gray-800 text-white place-items-center pb-4 cursor-pointer hover:bg-gray-900 first:col-start-(--grid-start-position)'
             style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as MyCustomCSS : {}}>
             {/*<Link to={`/${year}/${month}/${day}`} className='cell-link' />*/}
             <span className='cell-day-number'>
                 {day}
             </span>
-            <p className="">Test</p>
         </div>
+        {/*<div
+            className={classes.trim()}
+            style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as MyCustomCSS : {}}>
+            <Link to={`/${year}/${month}/${day}`} className='cell-link' />
+            <span className='cell-day-number'>
+                {day}
+            </span>
+            <p className="">Test</p>
+        </div>*/}
+       </>
     );
 }
 

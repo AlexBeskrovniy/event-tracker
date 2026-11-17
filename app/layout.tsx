@@ -27,7 +27,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
         <body className="min-h-full flex flex-col">
             <IconsSprite />
-            <h1>This is a root wrapper</h1>
             {children}
         </body>
     </html>
