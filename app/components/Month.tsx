@@ -3,11 +3,9 @@
 import dayjs from 'dayjs'
 import { useState } from 'react';
 import Cell from '@/app/components/Cell';
+import WeekBar from '@/app/components/WeekBar';
+import Navigation from '@/app/components/Nav';
 
-// import './Month.scss';
-// import WeekBar from '../WeekBar/WeekBar';
-// import Cell from '../Cell/Cell';
-// import Nav from '../Nav/Nav';
 // import { useAuthContext } from '../AuthProvider';
 
 
@@ -30,20 +28,20 @@ export default function Month() {
     const [month, setMonth] = useState<number>(initMonth);
     const [year, setYear] = useState<number>(initYear);
 
-    // const changeMonth = (dir: number) => {
-    //     if (month === 0 && dir === -1) {
-    //       setYear(year - 1);
-    //       setMonth(11);
-    //       return;
-    //     }
-    //
-    //     if (month === 11 && dir === 1) {
-    //       setYear(year + 1);
-    //       setMonth(0);
-    //       return;
-    //     }
-    //     setMonth(month + dir);
-    // }
+    const changeMonth = (dir: number) => {
+        if (month === 0 && dir === -1) {
+          setYear(year - 1);
+          setMonth(11);
+          return;
+        }
+    
+        if (month === 11 && dir === 1) {
+          setYear(year + 1);
+          setMonth(0);
+          return;
+        }
+        setMonth(month + dir);
+    }
 
     const DAYS_IN_MONTH = dayjs().month(month).daysInMonth();
     const selectedMonthTitle = dayjs().month(month).year(year).format('MMMM YYYY');
@@ -56,7 +54,7 @@ export default function Month() {
         //     const [y, m, d] = record.date.split('-');
         //     return +y === year && +m === month + 1 && +d === i;
         // });
-        const hasData = false;
+        const hasData = i%5 === 0;
 
         dayCells.push(
             <Cell
@@ -71,22 +69,14 @@ export default function Month() {
 
     return (
         <>
-            <h3>{ selectedMonthTitle }</h3>
+            <h3 className='mb-8'>{ selectedMonthTitle }</h3>
             <div className='mb-8'>
+                <WeekBar />
                 <div className='grid gap-1 grid-cols-7 grid-rows-6'>
                     { dayCells }
                 </div>
             </div>
+            <Navigation changeMonth={changeMonth} />
         </>
     );
 }
-        // <>
-        //     <h3>{ selectedMonthTitle }</h3>
-        //     <div className='month'>
-        //         <WeekBar />
-        //         <div className='month-cells-wrapper'>
-        //             { dayCells }
-        //         </div>
-        //     </div>
-        //     <Nav changeMonth={changeMonth} />
-        // </>

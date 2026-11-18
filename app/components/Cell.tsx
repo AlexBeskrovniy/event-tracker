@@ -1,8 +1,7 @@
 import dayjs from 'dayjs'
 // import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { CSSProperties } from 'react';
-
-// import './Cell.scss';
 
 type CellProps = {
     day: number;
@@ -18,7 +17,7 @@ interface MyCustomCSS extends CSSProperties {
 
 export default function Cell({ day, month, year, isToday, hasData }: CellProps) {
     const activeClass = isToday ? 'active' : '';
-    const withData = hasData ? 'filled': '';
+    const filledClass = hasData ? 'filled': '';
     
     const dayObj = new Date(year, month, day);
 
@@ -29,28 +28,16 @@ export default function Cell({ day, month, year, isToday, hasData }: CellProps) 
     // || 7 - because of 'Sunday' dayjs index === 0
     const monthFirstDayPosition = day === 1 ? dayIndex || 7 : null;
     
-    const classes = `cell ${holidayClass} ${activeClass} ${withData}`;
+    const classMods = `${holidayClass} ${activeClass} ${filledClass}`;
 
     return (
-        <>
         <div
-            className='relative bg-gray-800 text-white place-items-center pb-4 cursor-pointer hover:bg-gray-900 first:col-start-(--grid-start-position)'
+            className={`relative bg-(--background-contrast) text-white place-items-center py-4 cursor-pointer hover:bg-(--background-highlight) first:col-start-(--grid-start-position) ${classMods}`}
             style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as MyCustomCSS : {}}>
             {/*<Link to={`/${year}/${month}/${day}`} className='cell-link' />*/}
-            <span className='cell-day-number'>
-                {day}
-            </span>
+            <Link href="/" className='abs-full'></Link>
+            <span>{day}</span>
         </div>
-        {/*<div
-            className={classes.trim()}
-            style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as MyCustomCSS : {}}>
-            <Link to={`/${year}/${month}/${day}`} className='cell-link' />
-            <span className='cell-day-number'>
-                {day}
-            </span>
-            <p className="">Test</p>
-        </div>*/}
-       </>
     );
 }
 
