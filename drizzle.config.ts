@@ -7,6 +7,7 @@ export default defineConfig({
   schema: "./db/schema.ts",
   out: "./migrations",
   dialect: "postgresql",
+  schemaFilter: ['public', 'neon_auth'],
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },

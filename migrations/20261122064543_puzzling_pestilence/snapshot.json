@@ -2,7 +2,7 @@
   "type": "base",
   "version": "9",
   "dialect": "postgres",
-  "id": "df47ffb9-1dad-4519-a9eb-c50f584f728e",
+  "id": "28682c50-2a9a-4131-9432-8943dc39e403",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -17,6 +17,23 @@
         "s|sch|neon_auth",
         "n|sch|neon_auth",
         "e|sch|neon_auth"
+      ]
+    },
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "priority"
+      ],
+      "writes": [
+        "s|enum|public.priority",
+        "n|enum|public.priority",
+        "e|enum|public.priority",
+        "n|type|public.priority"
+      ],
+      "reads": [
+        "n|sch|public"
       ]
     },
     {
@@ -36,6 +53,45 @@
       ],
       "reads": [
         "n|sch|neon_auth"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "calendars"
+      ],
+      "writes": [
+        "s|tbl|public.calendars",
+        "n|tbl|public.calendars",
+        "e|tbl|public.calendars",
+        "n|rel|public.calendars",
+        "n|type|public.calendars",
+        "n|rel|public.calendars_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "events"
+      ],
+      "writes": [
+        "s|tbl|public.events",
+        "n|tbl|public.events",
+        "e|tbl|public.events",
+        "n|rel|public.events",
+        "n|type|public.events",
+        "n|rel|public.events_pkey"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|enum|public.priority"
       ]
     },
     {
@@ -218,6 +274,47 @@
       "statementType": "create_index",
       "statementTarget": [
         "index",
+        "public",
+        "calendars",
+        "calendars_user_idx"
+      ],
+      "writes": [
+        "s|idx|public.calendars_user_idx",
+        "n|idx|public.calendars_user_idx",
+        "e|idx|public.calendars_user_idx",
+        "n|rel|public.calendars_user_idx"
+      ],
+      "reads": [
+        "n|tbl|public.calendars",
+        "n|sch|public",
+        "n|col|public.calendars.user_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "events",
+        "events_calendar_date_idx"
+      ],
+      "writes": [
+        "s|idx|public.events_calendar_date_idx",
+        "n|idx|public.events_calendar_date_idx",
+        "e|idx|public.events_calendar_date_idx",
+        "n|rel|public.events_calendar_date_idx"
+      ],
+      "reads": [
+        "n|tbl|public.events",
+        "n|sch|public",
+        "n|col|public.events.calendar_id",
+        "n|col|public.events.date"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
         "neon_auth",
         "invitation",
         "invitation_email_idx"
@@ -339,29 +436,6 @@
       "statementTarget": [
         "table",
         "neon_auth",
-        "session"
-      ],
-      "writes": [
-        "s|fk|neon_auth.session.session_userId_fkey",
-        "n|fk|neon_auth.session.session_userId_fkey",
-        "e|fk|neon_auth.session.session_userId_fkey",
-        "n|con|neon_auth.session.session_userId_fkey"
-      ],
-      "reads": [
-        "n|tbl|neon_auth.session",
-        "n|sch|neon_auth",
-        "n|tbl|neon_auth.user",
-        "n|sch|neon_auth",
-        "n|col|neon_auth.session.userId",
-        "n|col|neon_auth.user.id",
-        "e|uniqueness|neon_auth.user.id"
-      ]
-    },
-    {
-      "statementType": "create_fk",
-      "statementTarget": [
-        "table",
-        "neon_auth",
         "account"
       ],
       "writes": [
@@ -378,6 +452,98 @@
         "n|col|neon_auth.account.userId",
         "n|col|neon_auth.user.id",
         "e|uniqueness|neon_auth.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "calendars"
+      ],
+      "writes": [
+        "s|fk|public.calendars.calendars_user_id_user_id_fkey",
+        "n|fk|public.calendars.calendars_user_id_user_id_fkey",
+        "e|fk|public.calendars.calendars_user_id_user_id_fkey",
+        "n|con|public.calendars.calendars_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.calendars",
+        "n|sch|public",
+        "n|tbl|neon_auth.user",
+        "n|sch|neon_auth",
+        "n|col|public.calendars.user_id",
+        "n|col|neon_auth.user.id",
+        "e|uniqueness|neon_auth.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "events"
+      ],
+      "writes": [
+        "s|fk|public.events.events_calendar_id_calendars_id_fkey",
+        "n|fk|public.events.events_calendar_id_calendars_id_fkey",
+        "e|fk|public.events.events_calendar_id_calendars_id_fkey",
+        "n|con|public.events.events_calendar_id_calendars_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.events",
+        "n|sch|public",
+        "n|tbl|public.calendars",
+        "n|sch|public",
+        "n|col|public.events.calendar_id",
+        "n|col|public.calendars.id",
+        "e|uniqueness|public.calendars.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "neon_auth",
+        "invitation"
+      ],
+      "writes": [
+        "s|fk|neon_auth.invitation.invitation_inviterId_fkey",
+        "n|fk|neon_auth.invitation.invitation_inviterId_fkey",
+        "e|fk|neon_auth.invitation.invitation_inviterId_fkey",
+        "n|con|neon_auth.invitation.invitation_inviterId_fkey"
+      ],
+      "reads": [
+        "n|tbl|neon_auth.invitation",
+        "n|sch|neon_auth",
+        "n|tbl|neon_auth.user",
+        "n|sch|neon_auth",
+        "n|col|neon_auth.invitation.inviterId",
+        "n|col|neon_auth.user.id",
+        "e|uniqueness|neon_auth.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "neon_auth",
+        "invitation"
+      ],
+      "writes": [
+        "s|fk|neon_auth.invitation.invitation_organizationId_fkey",
+        "n|fk|neon_auth.invitation.invitation_organizationId_fkey",
+        "e|fk|neon_auth.invitation.invitation_organizationId_fkey",
+        "n|con|neon_auth.invitation.invitation_organizationId_fkey"
+      ],
+      "reads": [
+        "n|tbl|neon_auth.invitation",
+        "n|sch|neon_auth",
+        "n|tbl|neon_auth.organization",
+        "n|sch|neon_auth",
+        "n|col|neon_auth.invitation.organizationId",
+        "n|col|neon_auth.organization.id",
+        "e|uniqueness|neon_auth.organization.id"
       ]
     },
     {
@@ -431,45 +597,22 @@
       "statementTarget": [
         "table",
         "neon_auth",
-        "invitation"
+        "session"
       ],
       "writes": [
-        "s|fk|neon_auth.invitation.invitation_inviterId_fkey",
-        "n|fk|neon_auth.invitation.invitation_inviterId_fkey",
-        "e|fk|neon_auth.invitation.invitation_inviterId_fkey",
-        "n|con|neon_auth.invitation.invitation_inviterId_fkey"
+        "s|fk|neon_auth.session.session_userId_fkey",
+        "n|fk|neon_auth.session.session_userId_fkey",
+        "e|fk|neon_auth.session.session_userId_fkey",
+        "n|con|neon_auth.session.session_userId_fkey"
       ],
       "reads": [
-        "n|tbl|neon_auth.invitation",
+        "n|tbl|neon_auth.session",
         "n|sch|neon_auth",
         "n|tbl|neon_auth.user",
         "n|sch|neon_auth",
-        "n|col|neon_auth.invitation.inviterId",
+        "n|col|neon_auth.session.userId",
         "n|col|neon_auth.user.id",
         "e|uniqueness|neon_auth.user.id"
-      ]
-    },
-    {
-      "statementType": "create_fk",
-      "statementTarget": [
-        "table",
-        "neon_auth",
-        "invitation"
-      ],
-      "writes": [
-        "s|fk|neon_auth.invitation.invitation_organizationId_fkey",
-        "n|fk|neon_auth.invitation.invitation_organizationId_fkey",
-        "e|fk|neon_auth.invitation.invitation_organizationId_fkey",
-        "n|con|neon_auth.invitation.invitation_organizationId_fkey"
-      ],
-      "reads": [
-        "n|tbl|neon_auth.invitation",
-        "n|sch|neon_auth",
-        "n|tbl|neon_auth.organization",
-        "n|sch|neon_auth",
-        "n|col|neon_auth.invitation.organizationId",
-        "n|col|neon_auth.organization.id",
-        "e|uniqueness|neon_auth.organization.id"
       ]
     }
   ],
@@ -481,6 +624,18 @@
     {
       "schema": "neon_auth",
       "name": "account",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "calendars",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "events",
       "isRlsEnabled": false,
       "entityType": "tables"
     },
@@ -533,112 +688,18 @@
       "entityType": "tables"
     },
     {
-      "schema": "neon_auth",
-      "table": "jwks",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
+      "schema": "public",
+      "name": "priority",
+      "values": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "entityType": "enums"
     },
     {
       "schema": "neon_auth",
       "table": "account",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "organization",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "id",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "invitation",
       "name": "id",
       "type": "uuid",
       "typeSchema": null,
@@ -664,175 +725,6 @@
     },
     {
       "schema": "neon_auth",
-      "table": "organization",
-      "name": "name",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "name",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "name",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "expiresAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "invitation",
-      "name": "organizationId",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "organizationId",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "identifier",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "jwks",
-      "name": "publicKey",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "endpoint_id",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "jwks",
-      "name": "privateKey",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "token",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "userId",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "organization",
-      "name": "slug",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
       "table": "account",
       "name": "providerId",
       "type": "text",
@@ -846,58 +738,6 @@
     },
     {
       "schema": "neon_auth",
-      "table": "invitation",
-      "name": "email",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "value",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "email",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "invitation",
-      "name": "role",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
       "table": "account",
       "name": "userId",
       "type": "uuid",
@@ -911,242 +751,8 @@
     },
     {
       "schema": "neon_auth",
-      "table": "user",
-      "name": "emailVerified",
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "role",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "created_at",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "jwks",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "expiresAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "organization",
-      "name": "logo",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
       "table": "account",
       "name": "accessToken",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "updatedAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "image",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "jwks",
-      "name": "expiresAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "organization",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "updated_at",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "invitation",
-      "name": "status",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "updatedAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "ipAddress",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1171,11 +777,609 @@
     },
     {
       "schema": "neon_auth",
+      "table": "account",
+      "name": "idToken",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "account",
+      "name": "accessTokenExpiresAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "account",
+      "name": "refreshTokenExpiresAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "account",
+      "name": "scope",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "account",
+      "name": "password",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "account",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "account",
+      "name": "updatedAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "shared",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "user_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "title",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "date",
+      "type": "date",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "completed",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "priority",
+      "type": "priority",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'medium'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "calendar_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "organizationId",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "expiresAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "invitation",
+      "name": "inviterId",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "publicKey",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "privateKey",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "expiresAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
       "table": "jwks",
       "name": "alg",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "crv",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "organizationId",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "userId",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "organization",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "organization",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "organization",
+      "name": "slug",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "organization",
+      "name": "logo",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "organization",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -1197,13 +1401,65 @@
     },
     {
       "schema": "neon_auth",
-      "table": "invitation",
-      "name": "expiresAt",
-      "type": "timestamp with time zone",
+      "table": "project_config",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "name",
+      "type": "text",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
       "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "endpoint_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
       "generated": null,
       "identity": null,
       "entityType": "columns"
@@ -1236,8 +1492,151 @@
     },
     {
       "schema": "neon_auth",
-      "table": "account",
-      "name": "idToken",
+      "table": "project_config",
+      "name": "email_provider",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "email_and_password",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "allow_localhost",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "plugin_configs",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "webhook_config",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "project_config",
+      "name": "auth_logs_export_enabled",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "expiresAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "token",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "updatedAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "ipAddress",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1262,97 +1661,6 @@
     },
     {
       "schema": "neon_auth",
-      "table": "jwks",
-      "name": "crv",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "invitation",
-      "name": "createdAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "updatedAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "CURRENT_TIMESTAMP",
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "email_provider",
-      "type": "jsonb",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "account",
-      "name": "accessTokenExpiresAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "role",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "invitation",
-      "name": "inviterId",
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
       "table": "session",
       "name": "userId",
       "type": "uuid",
@@ -1366,86 +1674,8 @@
     },
     {
       "schema": "neon_auth",
-      "table": "account",
-      "name": "refreshTokenExpiresAt",
-      "type": "timestamp with time zone",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
       "table": "session",
       "name": "impersonatedBy",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "banned",
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "email_and_password",
-      "type": "jsonb",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "user",
-      "name": "banReason",
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "project_config",
-      "name": "allow_localhost",
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "account",
-      "name": "scope",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1470,9 +1700,61 @@
     },
     {
       "schema": "neon_auth",
-      "table": "project_config",
-      "name": "plugin_configs",
-      "type": "jsonb",
+      "table": "user",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "emailVerified",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "image",
+      "type": "text",
       "typeSchema": null,
       "notNull": false,
       "dimensions": 0,
@@ -1483,8 +1765,60 @@
     },
     {
       "schema": "neon_auth",
-      "table": "account",
-      "name": "password",
+      "table": "user",
+      "name": "createdAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "updatedAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "CURRENT_TIMESTAMP",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "role",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "banned",
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "banReason",
       "type": "text",
       "typeSchema": null,
       "notNull": false,
@@ -1509,11 +1843,24 @@
     },
     {
       "schema": "neon_auth",
-      "table": "project_config",
-      "name": "webhook_config",
-      "type": "jsonb",
+      "table": "verification",
+      "name": "id",
+      "type": "uuid",
       "typeSchema": null,
-      "notNull": false,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "verification",
+      "name": "identifier",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
       "dimensions": 0,
       "default": null,
       "generated": null,
@@ -1522,7 +1869,33 @@
     },
     {
       "schema": "neon_auth",
-      "table": "account",
+      "table": "verification",
+      "name": "value",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "verification",
+      "name": "expiresAt",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "verification",
       "name": "createdAt",
       "type": "timestamp with time zone",
       "typeSchema": null,
@@ -1535,26 +1908,13 @@
     },
     {
       "schema": "neon_auth",
-      "table": "project_config",
-      "name": "auth_logs_export_enabled",
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "entityType": "columns"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "account",
+      "table": "verification",
       "name": "updatedAt",
       "type": "timestamp with time zone",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": null,
+      "default": "CURRENT_TIMESTAMP",
       "generated": null,
       "identity": null,
       "entityType": "columns"
@@ -1566,11 +1926,60 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "userId",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "calendars",
+      "name": "calendars_user_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "user_id",
           "isExpression": false,
-          "value": "userId"
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "entityType": "indexes"
+    },
+    {
+      "schema": "public",
+      "table": "events",
+      "name": "events_calendar_date_idx",
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "calendar_id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "date",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1587,11 +1996,11 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "email",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
-          "isExpression": false,
-          "value": "email"
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1608,11 +2017,11 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "organizationId",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
-          "isExpression": false,
-          "value": "organizationId"
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1629,11 +2038,11 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "organizationId",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
-          "isExpression": false,
-          "value": "organizationId"
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1650,11 +2059,11 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "userId",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
-          "isExpression": false,
-          "value": "userId"
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1671,11 +2080,11 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "userId",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
-          "isExpression": false,
-          "value": "userId"
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1692,11 +2101,11 @@
       "nameExplicit": true,
       "columns": [
         {
+          "value": "identifier",
+          "isExpression": false,
           "asc": true,
           "nullsFirst": false,
-          "opclass": null,
-          "isExpression": false,
-          "value": "identifier"
+          "opclass": null
         }
       ],
       "isUnique": false,
@@ -1705,23 +2114,6 @@
       "method": "btree",
       "concurrently": false,
       "entityType": "indexes"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "session",
-      "name": "session_userId_fkey",
-      "nameExplicit": true,
-      "columns": [
-        "userId"
-      ],
-      "schemaTo": "neon_auth",
-      "tableTo": "user",
-      "columnsTo": [
-        "id"
-      ],
-      "onUpdate": "NO ACTION",
-      "onDelete": "CASCADE",
-      "entityType": "fks"
     },
     {
       "schema": "neon_auth",
@@ -1741,15 +2133,15 @@
       "entityType": "fks"
     },
     {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "member_organizationId_fkey",
-      "nameExplicit": true,
+      "schema": "public",
+      "table": "calendars",
+      "name": "calendars_user_id_user_id_fkey",
+      "nameExplicit": false,
       "columns": [
-        "organizationId"
+        "user_id"
       ],
       "schemaTo": "neon_auth",
-      "tableTo": "organization",
+      "tableTo": "user",
       "columnsTo": [
         "id"
       ],
@@ -1758,15 +2150,15 @@
       "entityType": "fks"
     },
     {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "member_userId_fkey",
-      "nameExplicit": true,
+      "schema": "public",
+      "table": "events",
+      "name": "events_calendar_id_calendars_id_fkey",
+      "nameExplicit": false,
       "columns": [
-        "userId"
+        "calendar_id"
       ],
-      "schemaTo": "neon_auth",
-      "tableTo": "user",
+      "schemaTo": "public",
+      "tableTo": "calendars",
       "columnsTo": [
         "id"
       ],
@@ -1810,23 +2202,54 @@
     },
     {
       "schema": "neon_auth",
-      "table": "user",
-      "name": "user_pkey",
+      "table": "member",
+      "name": "member_organizationId_fkey",
+      "nameExplicit": true,
       "columns": [
+        "organizationId"
+      ],
+      "schemaTo": "neon_auth",
+      "tableTo": "organization",
+      "columnsTo": [
         "id"
       ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "member_userId_fkey",
       "nameExplicit": true,
-      "entityType": "pks"
+      "columns": [
+        "userId"
+      ],
+      "schemaTo": "neon_auth",
+      "tableTo": "user",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
     },
     {
       "schema": "neon_auth",
       "table": "session",
-      "name": "session_pkey",
+      "name": "session_userId_fkey",
+      "nameExplicit": true,
       "columns": [
+        "userId"
+      ],
+      "schemaTo": "neon_auth",
+      "tableTo": "user",
+      "columnsTo": [
         "id"
       ],
-      "nameExplicit": true,
-      "entityType": "pks"
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
     },
     {
       "schema": "neon_auth",
@@ -1835,47 +2258,27 @@
       "columns": [
         "id"
       ],
-      "nameExplicit": true,
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
-      "schema": "neon_auth",
-      "table": "verification",
-      "name": "verification_pkey",
+      "schema": "public",
+      "table": "calendars",
+      "name": "calendars_pkey",
       "columns": [
         "id"
       ],
-      "nameExplicit": true,
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
-      "schema": "neon_auth",
-      "table": "jwks",
-      "name": "jwks_pkey",
+      "schema": "public",
+      "table": "events",
+      "name": "events_pkey",
       "columns": [
         "id"
       ],
-      "nameExplicit": true,
-      "entityType": "pks"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "organization",
-      "name": "organization_pkey",
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": true,
-      "entityType": "pks"
-    },
-    {
-      "schema": "neon_auth",
-      "table": "member",
-      "name": "member_pkey",
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": true,
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
@@ -1885,7 +2288,37 @@
       "columns": [
         "id"
       ],
-      "nameExplicit": true,
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "jwks",
+      "name": "jwks_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "member",
+      "name": "member_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "organization",
+      "name": "organization_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
@@ -1895,30 +2328,38 @@
       "columns": [
         "id"
       ],
-      "nameExplicit": true,
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "session_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
       "entityType": "pks"
     },
     {
       "schema": "neon_auth",
       "table": "user",
-      "name": "user_email_key",
-      "nameExplicit": true,
+      "name": "user_pkey",
       "columns": [
-        "email"
+        "id"
       ],
-      "nullsNotDistinct": false,
-      "entityType": "uniques"
+      "nameExplicit": false,
+      "entityType": "pks"
     },
     {
       "schema": "neon_auth",
-      "table": "session",
-      "name": "session_token_key",
-      "nameExplicit": true,
+      "table": "verification",
+      "name": "verification_pkey",
       "columns": [
-        "token"
+        "id"
       ],
-      "nullsNotDistinct": false,
-      "entityType": "uniques"
+      "nameExplicit": false,
+      "entityType": "pks"
     },
     {
       "schema": "neon_auth",
@@ -1938,6 +2379,28 @@
       "nameExplicit": true,
       "columns": [
         "endpoint_id"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "session",
+      "name": "session_token_key",
+      "nameExplicit": true,
+      "columns": [
+        "token"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "neon_auth",
+      "table": "user",
+      "name": "user_email_key",
+      "nameExplicit": true,
+      "columns": [
+        "email"
       ],
       "nullsNotDistinct": false,
       "entityType": "uniques"
