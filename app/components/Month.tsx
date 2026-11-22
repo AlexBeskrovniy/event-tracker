@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Cell from '@/app/components/Cell';
 import WeekBar from '@/app/components/WeekBar';
 import Navigation from '@/app/components/Nav';
+import Logout from '@/app/components/auth/Logout';
 
 // import { useAuthContext } from '../AuthProvider';
 
@@ -77,6 +78,7 @@ export default function Month() {
                 </div>
             </div>
             <Navigation changeMonth={changeMonth} />
+            <Logout />
         </>
     );
 }

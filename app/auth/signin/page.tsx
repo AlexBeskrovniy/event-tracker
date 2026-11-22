@@ -50,7 +50,7 @@ export default function SignInPage() {
             </form>
             <p className='flex gap-4 items-center justify-center text-sm opacity-65'>
                 <span className='opacity-65'>Have not an account yet?</span>
-                <Link href="/signup">Sign Up</Link>
+                <Link href="/auth/signup">Sign Up</Link>
             </p>
         </div>
     );
