@@ -8,7 +8,7 @@ export default auth.middleware({
 export const config = {
   matcher: [
     // Protected routes requiring authentication
-    '/workspace/:path/:foo*',
+    '/app/:calendar*',
     // Exclude API routes, static files, image optimizations, and .png files
     // '/((?!api|_next/static|_next/image|.*\\.png$).*)',
   ],

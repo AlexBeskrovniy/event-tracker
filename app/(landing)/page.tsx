@@ -5,8 +5,8 @@ export default function Home() {
   return (
       <>
         <nav>
-            <Link href="/signin">Sign In</Link>
-            <Link href="/signup">Sign Up</Link>
+            <Link href="/auth/signin">Sign In</Link>
+            <Link href="/auth/signup">Sign Up</Link>
 
             <Icon id={Icons.CHECK} />
             <Icon id={Icons.DOUBLE_ANGLE_LEFT} size='3rem' />
