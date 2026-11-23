@@ -7,9 +7,6 @@ export default function Home() {
         <nav>
             <Link href="/auth/signin">Sign In</Link>
             <Link href="/auth/signup">Sign Up</Link>
-
-            <Icon id={Icons.CHECK} />
-            <Icon id={Icons.DOUBLE_ANGLE_LEFT} size='3rem' />
         </nav>
         <h1>Home page</h1>
         <p>Welcome to the Event Tracker app.</p>

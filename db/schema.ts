@@ -9,6 +9,7 @@ import {
     boolean,
     jsonb,
     index,
+    uniqueIndex,
     foreignKey,
     unique
 } from "drizzle-orm/pg-core";
@@ -172,12 +173,13 @@ export const priorityEnum = pgEnum("priority", ["low", "medium", "high"]);
 export const calendars = pgTable("calendars", {
     id: uuid().defaultRandom().primaryKey(),
     name: text("name").notNull(),
-    shared: boolean("shared").default(false).notNull(),
+    slug: text("slug").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
     userId: uuid('user_id').notNull().references(() => userInNeonAuth.id, { onDelete: 'cascade' })
 }, (table) => [
-    index("calendars_user_idx").on(table.userId)
+    index("calendars_user_idx").on(table.userId),
+    uniqueIndex("calendars_user_slug_idx").on(table.userId, table.slug)
 ]);
 
 export const events = pgTable("events", {

@@ -6,7 +6,8 @@ export function GoogleSignInButton() {
   const handleSignIn = async () => {
     await authClient.signIn.social({
       provider: 'google',
-      callbackURL: '/app/test',
+      callbackURL: '/app',
+      newUserCallbackURL: '/app'
     });
   };
 

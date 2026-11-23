@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { signUpWithEmail } from '@/app/actions/auth';
+import { GoogleSignInButton } from '@/app/components/auth/GoogleSignInButton';
 
 export default function SignInPage() {
     const [state, formAction, isPending] = useActionState(signUpWithEmail, null);
@@ -48,6 +49,8 @@ export default function SignInPage() {
                     Sign In
                 </button>
             </form>
+            <p>Or</p>
+            <GoogleSignInButton />
             <p className='flex gap-4 items-center justify-center text-sm opacity-65'>
                 <span className='opacity-65'>Have not an account yet?</span>
                 <Link href="/auth/signup">Sign Up</Link>

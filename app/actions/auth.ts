@@ -28,7 +28,7 @@ export async function signUpWithEmail(
     return { error: error.message || 'Failed to create account' };
   }
 
-  redirect('/app/test');
+  redirect('/app');
 }
 
 export async function signInWithEmail(
@@ -42,7 +42,7 @@ export async function signInWithEmail(
   if (error) {
     return { error: error.message || 'Failed to sign in. Try again' };
   }
-  redirect('/app/test');
+  redirect('/app');
 }
 
 export async function signOut() {

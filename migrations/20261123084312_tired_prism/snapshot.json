@@ -1,0 +1,121 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "de6efb06-b8bc-4246-8026-25d1b9b85daf",
+  "prevIds": [
+    "28682c50-2a9a-4131-9432-8943dc39e403"
+  ],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "calendars",
+        "slug"
+      ],
+      "writes": [
+        "s|col|public.calendars.slug",
+        "n|col|public.calendars.slug",
+        "e|col|public.calendars.slug"
+      ],
+      "reads": [
+        "n|tbl|public.calendars",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "drop_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "calendars",
+        "shared"
+      ],
+      "writes": [
+        "s|col|public.calendars.shared",
+        "n|col|public.calendars.shared",
+        "e|col|public.calendars.shared"
+      ],
+      "reads": [
+        "n|tbl|public.calendars",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "calendars",
+        "calendars_user_slug_idx"
+      ],
+      "writes": [
+        "s|idx|public.calendars_user_slug_idx",
+        "n|idx|public.calendars_user_slug_idx",
+        "e|idx|public.calendars_user_slug_idx",
+        "n|rel|public.calendars_user_slug_idx"
+      ],
+      "reads": [
+        "n|tbl|public.calendars",
+        "n|sch|public",
+        "n|col|public.calendars.user_id",
+        "n|col|public.calendars.slug"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "calendars",
+        "name": "slug",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "calendars",
+        "name": "calendars_user_slug_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "slug",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": true,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "drop",
+      "key": "columns\u0000[\"public\",\"calendars\",\"shared\"]"
+    }
+  ]
+}

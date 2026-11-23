@@ -5,13 +5,13 @@ import { calendars, type Calendar } from '@/db/schema'; // TODO: Temporary type,
 import { auth } from '@/lib/auth/server';
 
 export type ActionResponse = {
-  success: boolean
-  message: string
-  errors?: Record<string, string[]>
-  error?: string
+  success: boolean;
+  message: string;
+  errors?: Record<string, string[]>;
+  error?: string;
 }
 
-export async function createCalendar(calendar: Calendar): Promise<ActionResponse & { calendar?: Calendar }> {
+export async function createCalendar(calendar: {name: string}): Promise<ActionResponse & { calendar?: Calendar }> {
     try {
         const { data: session } = await auth.getSession();
         
@@ -25,14 +25,16 @@ export async function createCalendar(calendar: Calendar): Promise<ActionResponse
 
         // Validate calendar data here before insertion
 
-        db.insert(calendars).values({
+        const newCalendar = await db.insert(calendars).values({
             name: calendar.name,
+            slug: calendar.name.toLowerCase(),
             userId: session.user.id
         }).returning();
 
         return {
             success: true,
-            message: 'Succesfully created your personal calendar'
+            message: 'Succesfully created your personal calendar',
+            calendar: newCalendar[0]
         }
 
     } catch(err) {
