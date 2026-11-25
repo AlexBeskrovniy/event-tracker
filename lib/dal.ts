@@ -1,22 +1,19 @@
 import { db } from '@/db/drizzle';
-import { calendars } from '@/db/schema';
-import { auth } from '@/lib/auth/server';
-import { eq, desc, and } from 'drizzle-orm';
 
-export async function getUserCalendars(userId: string) {
+export async function getCalendars(userId: string) {
     //   'use cache'
     //   cacheTag('issues')
     try {
-        const result = await db
-            .select({
-                id: calendars.id,
-                name: calendars.name,
-                slug: calendars.slug,
-                createdAt: calendars.createdAt
-            })
-            .from(calendars)
-            .where(eq(calendars.userId, userId))
-            .orderBy(desc(calendars.createdAt))
+        const result = await db.query.calendars.findMany({
+            where: {
+                userId
+            },
+            with: { user: true },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        })
+
         return result
     } catch (err) {
         console.error('Error fetching calendars:', err)
@@ -24,26 +21,52 @@ export async function getUserCalendars(userId: string) {
     }
 }
 
-export async function getOneUserCalendar(userId: string, slug: string) {
+export async function getOneCalendar(userId: string, slug: string) {
     try {
-        const result = await db
-            .select({
-                id: calendars.id,
-                name: calendars.name,
-                slug: calendars.slug,
-                createdAt: calendars.createdAt
-            })
-            .from(calendars)
-            .where(and(eq(calendars.userId, userId), eq(calendars.slug, slug)));
-        console.log(result)
-        return result[0];
+        const result = await db.query.calendars.findFirst({
+            where: {
+                userId,
+                slug
+            },
+            with: { events: true }
+        })
+console.log(result);
+        return result;
         
     } catch (err) {
         console.error('Error finding calendar', err);
-        throw new Error('Failed to fetch calendar')
+        throw new Error('Failed to fetch calendar');
     }
 }
 
-// export async function getEvents() {
+export async function getEvents(calendarId: string, date: string) {
+    try {
+        const result = await db.query.events.findMany({
+            where: {
+                calendarId,
+                date
+            }
+        })
 
-// }
+        return result;
+    } catch (err) {
+        console.error('Error fetching events', err);
+        throw new Error('Failed to fetch events');
+    }
+
+}
+
+export async function getOneEvent(id: string) {
+    try {
+        const result = await db.query.events.findFirst({
+            where: {
+                id
+            }
+        });
+
+        return result;
+    } catch (err) {
+        console.error('Error finding calendar', err);
+        throw new Error('Failed to fetch event');
+    }
+}

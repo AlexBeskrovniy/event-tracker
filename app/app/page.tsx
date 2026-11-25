@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { auth } from '@/lib/auth/server';
-import { getUserCalendars } from '@/lib/dal';
+import { getCalendars } from '@/lib/dal';
 import CreateCalendar from '../components/CreateCalendar';
 
 export default async function App() {
@@ -8,7 +8,7 @@ export default async function App() {
 
     if (!session) return;
 
-    const calendars = await getUserCalendars(session.user.id);
+    const calendars = await getCalendars(session.user.id);
    
     return (
         <>

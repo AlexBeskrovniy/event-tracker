@@ -1,22 +1,20 @@
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth/server';
-import { getOneUserCalendar } from '@/lib/dal';
-import { Suspense } from 'react';
+import { getOneCalendar } from '@/lib/dal';
 import Month from '@/app/components/Month';
 
-export default async function Calendar({ params }: { params: Promise<{calendar: string}> }) {
+export default async function CalendarPage({ params }: { params: Promise<{calendar: string}> }) {
     const { data: session } = await auth.getSession();
     if (!session) return;
     const { calendar } = await params;
-    console.log(calendar)
-    const currentCalendar = await getOneUserCalendar(session.user.id, calendar) 
+    const currentCalendar = await getOneCalendar(session.user.id, calendar) 
 
     if (!currentCalendar) {
         notFound();
     } 
    
     return (
-        <Suspense fallback={<p>...Loading...</p>}>
+        <>
             {session?.user ? (
                 <>
                 <p>{session.user.name}</p>
@@ -25,6 +23,6 @@ export default async function Calendar({ params }: { params: Promise<{calendar: 
                 <Month />
                 </>
             ) : (<p>Not logged in</p>)}
-        </Suspense>
+        </>
     );
 }
