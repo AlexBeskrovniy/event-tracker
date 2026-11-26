@@ -6,11 +6,12 @@ import Cell from '@/app/components/Cell';
 import WeekBar from '@/app/components/WeekBar';
 import Navigation from '@/app/components/Nav';
 import Logout from '@/app/components/auth/Logout';
+import { useCalendarContext } from '@/app/components/CalendarProvider';
 
 // import { useAuthContext } from '../AuthProvider';
 
 
-const initMonth = dayjs().month();
+const initMonth = dayjs().month() + 1; // dayjs.month() returns month from zero index, fixed it here
 const initYear = dayjs().year();
 const initDay = dayjs().get('date');
 
@@ -26,6 +27,9 @@ const initDay = dayjs().get('date');
 // const initFormDefaultDate = dateInputValueFormater(initYear, initMonth, initDay);
 
 export default function Month() {
+    const calendar = useCalendarContext();
+
+    if (!calendar) return;
     const [month, setMonth] = useState<number>(initMonth);
     const [year, setYear] = useState<number>(initYear);
 
@@ -55,7 +59,8 @@ export default function Month() {
         //     const [y, m, d] = record.date.split('-');
         //     return +y === year && +m === month + 1 && +d === i;
         // });
-        const hasData = i%5 === 0;
+        // const hasData = i%5 === 0;
+        const hasData = false
 
         dayCells.push(
             <Cell
@@ -71,6 +76,8 @@ export default function Month() {
     return (
         <>
             <h3 className='mb-8'>{ selectedMonthTitle }</h3>
+            <h1>{ calendar.slug }</h1>
+            <h1>{ calendar.user?.name }</h1>
             <div className='mb-8'>
                 <WeekBar />
                 <div className='grid gap-1 grid-cols-7 grid-rows-6'>

@@ -1,5 +1,28 @@
 import { db } from '@/db/drizzle';
 
+export type CalendarDTO = {
+    id: string;
+    name: string;
+    slug: string;
+    userId: string;
+    user: {
+        name: string;
+        email: string;
+    } | null;
+    events: {
+        id: string;
+        date: string;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        completed: boolean;
+        description: string | null;
+        priority: "low" | "medium" | "high";
+        calendarId: string;
+    }[];
+} | undefined
+
+
 export async function getCalendars(userId: string) {
     //   'use cache'
     //   cacheTag('issues')
@@ -23,12 +46,24 @@ export async function getCalendars(userId: string) {
 
 export async function getOneCalendar(userId: string, slug: string) {
     try {
-        const result = await db.query.calendars.findFirst({
+        const result: CalendarDTO = await db.query.calendars.findFirst({
             where: {
                 userId,
                 slug
             },
-            with: { events: true }
+            columns: {
+                createdAt: false,
+                updatedAt: false
+            },
+            with: {
+                user: {
+                    columns: {
+                        name: true,
+                        email: true
+                    }
+                },
+                events: true
+            }
         })
 console.log(result);
         return result;
