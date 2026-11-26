@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import { useActionState } from 'react';
+import { useActionState, startTransition } from 'react';
 import { createCalendar, type ActionResponse } from '@/app/actions/calendars';
 
 type CreateCalendarProps = {
@@ -37,7 +37,13 @@ export default function CreateCalendar({ def }: CreateCalendarProps) {
         }
     }, initialActionState)
 
+    function handleCreateCalendar() {
+        startTransition(() => {
+            dispatchAction();
+        })
+    } 
+
     return (
-        <button onClick={dispatchAction} disabled={isPending}>Create your first calendar</button>
+        <button onClick={handleCreateCalendar} disabled={isPending}>Create your first calendar</button>
     );
 }

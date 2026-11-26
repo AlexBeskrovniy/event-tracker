@@ -2,12 +2,18 @@
 
 import Link from 'next/link';
 import { useActionState } from 'react';
-import { signUpWithEmail } from '@/app/actions/auth';
+import { signUpWithEmail, type ActionResponse } from '@/app/actions/auth';
 
 import { GoogleSignInButton } from '@/app/components/auth/GoogleSignInButton';
 
+const initialState: ActionResponse = {
+  success: false,
+  message: '',
+  errors: undefined,
+}
+
 export default function SignUpPage() {
-    const [state, formAction, isPending] = useActionState(signUpWithEmail, null);
+    const [state, formAction, isPending] = useActionState<ActionResponse, FormData>(signUpWithEmail, initialState);
     return (
         <div className='bg-(--background-contrast) px-4 py-6 my-auto flex flex-col w-full border rounded-lg'>
             <h1 className='text-2xl font-bold'>Create an account</h1>
@@ -16,6 +22,11 @@ export default function SignUpPage() {
                 action={formAction}
                 className='flex flex-col gap-10 my-8'
             >
+                {state.message && !state.success && (
+                    <div className="rounded-md px-3 py-2 text-sm text-red-500">
+                        {state.message}
+                    </div>
+                )}
                 <div className='flex flex-col gap-4 text-start'>
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="user-name">Username</label>
@@ -23,8 +34,17 @@ export default function SignUpPage() {
                             type="text"
                             name="name"
                             id="user-name"
+                            aria-describedby="name-error"
+                            disabled={isPending}
                             required
                         />
+                        {state?.errors?.properties?.name && (
+                            state.errors?.properties?.name.errors?.map(error => (
+                                <p key={'name-error'} id="name-error" className="text-sm text-red-500">
+                                    {error}
+                                </p>
+                            ))
+                        )}
                     </div>
 
                     <div className='flex flex-col gap-2'>
@@ -33,8 +53,17 @@ export default function SignUpPage() {
                             type="email"
                             name="email"
                             id="user-email"
+                            aria-describedby="email-error"
+                            disabled={isPending}
                             required
                         />
+                        {state?.errors?.properties?.email && (
+                            state.errors?.properties?.email.errors?.map(error => (
+                                <p key={'email-error'} id="email-error" className="text-sm text-red-500">
+                                    {error}
+                                </p>
+                            ))
+                        )}
                     </div>
 
                     <div className='flex flex-col gap-2'>
@@ -43,18 +72,36 @@ export default function SignUpPage() {
                             type="password"
                             name="password"
                             id="user-password"
+                            aria-describedby="password-error"
+                            disabled={isPending}
                             required
                         />
+                        {state?.errors?.properties?.password && (
+                            state.errors?.properties?.password.errors?.map(error => (
+                                <p key={'password-error'} id="password-error" className="text-sm text-red-500">
+                                    {error}
+                                </p>
+                            ))
+                        )}
                     </div>
 
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="user-password-confirm">Confirm password</label>
                         <input
                             type="password"
-                            name="password-confirm"
+                            name="confirm-password"
                             id="user-password-confirm"
+                            aria-describedby="password-confirm-error"
+                            disabled={isPending}
                             required
                         />
+                        {state?.errors?.properties?.confirmPassword && (
+                            state.errors?.properties?.confirmPassword.errors?.map(error => (
+                                <p key={'password-confirm-error'} id="password-confirm-error" className="text-sm text-red-500">
+                                    {error}
+                                </p>
+                            ))
+                        )}
                     </div>
                 </div>
 

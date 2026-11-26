@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/db/drizzle';
-import { calendars, type Calendar } from '@/db/schema'; // TODO: Temporary type, need to use infered type from zod scheme
+import { calendars, type Calendar } from '@/db/schema';
 import { auth } from '@/lib/auth/server';
 
 export type ActionResponse = {
