@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { auth } from '@/lib/auth/server';
+import Header from '../components/Header';
 
 export default async function Home() {
     const { data: session } = await auth.getSession();
@@ -11,10 +11,7 @@ export default async function Home() {
 
     return (
         <>
-            <nav>
-                <Link href="/auth/signin">Sign In</Link>
-                <Link href="/auth/signup">Sign Up</Link>
-            </nav>
+            <Header user={null} />
             <h1>Home page</h1>
             <p>Welcome to the Event Tracker app.</p>
         </>

@@ -3,6 +3,7 @@ import { PropsWithChildren } from "react";
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth/server';
 import { getOneCalendar } from '@/lib/dal';
+import Header from '@/app/components/Header';
 
 export default async function CalendarLayout({ params, children }: PropsWithChildren & { params: Promise<{calendar: string}> }) {
     const { data: session } = await auth.getSession();
@@ -16,6 +17,7 @@ export default async function CalendarLayout({ params, children }: PropsWithChil
     } 
     return (
         <CalendarProvider key={calendar} calendar={currentCalendar}>
+            <Header user={session.user} />
             { children }
         </CalendarProvider>
     );

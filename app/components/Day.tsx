@@ -32,10 +32,10 @@ export default function Day({ date }: DayProps) {
             <div className='flex flex-col gap-2'>
                 {dayEvents.length > 0 ? (
                     dayEvents.map((event) => (
-                        <>
-                            <div key={event.id}>{event.title}</div>
+                        <div key={event.id}>
+                            <div>{event.title}</div>
                             <p>{event.date}</p>
-                        </>
+                        </div>
                     ))
                 ) : (
                     <h1>No data</h1>

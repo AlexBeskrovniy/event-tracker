@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { auth } from '@/lib/auth/server';
 import { getCalendars } from '@/lib/dal';
 import CreateCalendar from '../components/CreateCalendar';
+import Header from '@/app/components/Header';
 
 export default async function App() {
     const { data: session } = await auth.getSession();
@@ -12,7 +13,7 @@ export default async function App() {
    
     return (
         <>
-        <p>{session.user.name}</p>
+        <Header user={session.user} />
         { calendars.length > 0
             ? (
                 <ul>

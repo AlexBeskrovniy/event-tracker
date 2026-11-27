@@ -2,17 +2,18 @@
 
 import dayjs from 'dayjs'
 import { useState } from 'react';
+import { numsToDate, displayedMonth } from '@/lib/helpers';
 import Cell from '@/app/components/Cell';
 import WeekBar from '@/app/components/WeekBar';
 import Navigation from '@/app/components/Nav';
-import Logout from '@/app/components/auth/Logout';
+import EventForm from '@/app/components/EventForm';
 import { useCalendarContext } from '@/app/components/CalendarProvider';
 
 const initMonth = dayjs().month(); // dayjs.month() returns month from zero index, fixed it here
 const initYear = dayjs().year();
 const initDay = dayjs().get('date');
 
-// const initFormDefaultDate = dateInputValueFormater(initYear, initMonth, initDay);
+const initFormDefaultDate = numsToDate(initYear, displayedMonth(initMonth), initDay);
 
 export default function Month() {
     const calendar = useCalendarContext();
@@ -73,7 +74,7 @@ export default function Month() {
                 </div>
             </div>
             <Navigation changeMonth={changeMonth} />
-            <Logout />
+            <EventForm defaultDate={initFormDefaultDate} />
         </>
     );
 }
