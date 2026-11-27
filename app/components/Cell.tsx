@@ -1,9 +1,9 @@
 'use client';
 
 import dayjs from 'dayjs'
-// import { Link } from 'react-router-dom';
 import Link from 'next/link';
 import { CSSProperties } from 'react';
+import { numsToDate, displayedMonth } from '@/lib/helpers';
 
 type CellProps = {
     day: number;
@@ -36,8 +36,7 @@ export default function Cell({ day, month, year, isToday, hasData }: CellProps) 
         <div
             className={`relative bg-(--background-contrast) text-white place-items-center py-4 cursor-pointer hover:bg-(--background-highlight) first:col-start-(--grid-start-position) ${classMods}`}
             style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as MyCustomCSS : {}}>
-            {/*<Link to={`/${year}/${month}/${day}`} className='cell-link' />*/}
-            <Link href={`/app/personal/${year}/${month}/${day}`} className='abs-full'></Link>
+            <Link href={`/app/personal/${numsToDate(year, displayedMonth(month), day)}`} className='abs-full'></Link>
             <span>{day}</span>
         </div>
     );

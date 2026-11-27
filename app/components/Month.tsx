@@ -8,22 +8,10 @@ import Navigation from '@/app/components/Nav';
 import Logout from '@/app/components/auth/Logout';
 import { useCalendarContext } from '@/app/components/CalendarProvider';
 
-// import { useAuthContext } from '../AuthProvider';
-
-
-const initMonth = dayjs().month() + 1; // dayjs.month() returns month from zero index, fixed it here
+const initMonth = dayjs().month(); // dayjs.month() returns month from zero index, fixed it here
 const initYear = dayjs().year();
 const initDay = dayjs().get('date');
 
-// TODO: helpers candidate
-// const dateInputValueFormater = (y: number, m: number, d: number): string => {
-//     //dayjs.month() returns month from zero index, fixed it here
-//     const month = (m + 1).toString().padStart(2, '0');
-//     const day = d.toString().padStart(2, '0');
-//
-//     return `${y}-${month }-${day}`;
-// }
-//
 // const initFormDefaultDate = dateInputValueFormater(initYear, initMonth, initDay);
 
 export default function Month() {
