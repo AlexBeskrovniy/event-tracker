@@ -6,11 +6,11 @@ export function displayedMonth(month: number): number {
 }
 
 // Returned date string YYYY-MM-DD
-export function numsToDate(y: number, m: number, d: number): string{
-    const month = m .toString().padStart(2, '0');
+export function numsToDate(y: number, m: number, d: number, fixMonthToDisplay: boolean = true): string{
+    const month = (fixMonthToDisplay ? displayedMonth(m) : m).toString().padStart(2, '0');
     const day = d.toString().padStart(2, '0');
 
-    return `${y}-${month }-${day}`;
+    return `${y}-${month}-${day}`;
 }
 
 // Receives date string YYYY-MM-DD

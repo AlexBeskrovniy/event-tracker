@@ -6,6 +6,7 @@
     --background: #18181A;
     --background-contrast: #111111;
     --background-highlight: #3B3B3B;
+    --text-color: #DDDDDD;
     --accent: #032235;
     --color-warn: yellow;
     --foreground: #ededed;
@@ -78,4 +79,16 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

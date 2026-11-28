@@ -3,7 +3,7 @@
 import dayjs from 'dayjs'
 import Link from 'next/link';
 import { CSSProperties } from 'react';
-import { numsToDate, displayedMonth } from '@/lib/helpers';
+import { numsToDate } from '@/lib/helpers';
 
 type CellProps = {
     day: number;
@@ -13,7 +13,7 @@ type CellProps = {
     hasData: boolean;
 }
 
-interface MyCustomCSS extends CSSProperties {
+interface CellCustomCSSProps extends CSSProperties {
     '--grid-start-position': number;
 }
 
@@ -35,8 +35,8 @@ export default function Cell({ day, month, year, isToday, hasData }: CellProps) 
     return (
         <div
             className={`relative bg-(--background-contrast) text-white place-items-center py-4 cursor-pointer hover:bg-(--background-highlight) first:col-start-(--grid-start-position) ${classMods}`}
-            style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as MyCustomCSS : {}}>
-            <Link href={`/app/personal/${numsToDate(year, displayedMonth(month), day)}`} className='abs-full'></Link>
+            style={monthFirstDayPosition ? {'--grid-start-position': monthFirstDayPosition} as CellCustomCSSProps : {}}>
+            <Link href={`/app/personal/${numsToDate(year, month, day)}`} className='abs-full'></Link>
             <span>{day}</span>
         </div>
     );

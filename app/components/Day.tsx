@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Event } from '@/db/schema';
 import { useCalendarContext } from '@/app/components/CalendarProvider';
 import Icon, { Icons } from '@/app/components/ui/Icon';
+import EventCard from '@/app/components/EventCard';
 
 type DayProps = {
     date: string;
@@ -32,10 +33,7 @@ export default function Day({ date }: DayProps) {
             <div className='flex flex-col gap-2'>
                 {dayEvents.length > 0 ? (
                     dayEvents.map((event) => (
-                        <div key={event.id}>
-                            <div>{event.title}</div>
-                            <p>{event.date}</p>
-                        </div>
+                        <EventCard key={event.id} event={event} />
                     ))
                 ) : (
                     <h1>No data</h1>
